@@ -107,58 +107,14 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); over
 #stk-e { left: 42%; top: 18%; }
 #stk-f { left: 80%; top: 62%; }
 
-/* Praying hands sticker */
-.stk-pray {
-  font-size: 72px;
-  background: white;
-  border-radius: 18px;
-  padding: 8px 10px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.07);
-  line-height: 1;
+/* Sticker images */
+.stk-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.12));
 }
-
-/* Figma frame sticker */
-.figma-frame {
-  position: relative;
-  width: 118px;
-  height: 118px;
-  border: 1.5px solid #4A90E8;
-  display: flex; align-items: center; justify-content: center;
-  background: transparent;
-}
-.figma-label {
-  position: absolute;
-  top: -32px; left: -2px;
-  background: #1C1C2E;
-  color: white;
-  font-family: var(--font);
-  font-size: 12px; font-weight: 400;
-  padding: 4px 10px 4px 5px;
-  border-radius: 5px;
-  display: flex; align-items: center; gap: 5px;
-  white-space: nowrap;
-}
-.figma-avatar {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: #6366F1; color: white;
-  font-size: 10px; font-weight: 600;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.figma-name { font-size: 11px; }
-.figma-content { font-size: 64px; line-height: 1; }
-.fig-handle {
-  position: absolute;
-  width: 8px; height: 8px;
-  background: white; border: 1.5px solid #4A90E8;
-}
-.fig-tl { top: -4px;    left: -4px; }
-.fig-tr { top: -4px;    right: -4px; }
-.fig-bl { bottom: -4px; left: -4px; }
-.fig-br { bottom: -4px; right: -4px; }
-
-/* M speech bubble */
-.m-bubble { width: 88px; height: 104px; }
 
 /* ============================================================
    003 — PHOTO
