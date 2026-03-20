@@ -3,121 +3,176 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Magdalena — Principal Product Designer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Magdalena Hendzelek — Principal Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <!-- ===================== Floating Navigation ===================== -->
-  <nav class="floating-nav" id="floating-nav">
-    <a href="index.html" class="nav-pill active">Home</a>
-    <a href="mentorship.html" class="nav-pill">Mentorship Program</a>
-    <a href="contact.html" class="nav-pill">Contact</a>
+  <!-- ANIMATED GRADIENT BACKGROUND -->
+  <div class="g-bg" id="g-bg">
+    <div class="g-blob g-b1"></div>
+    <div class="g-blob g-b2"></div>
+    <div class="g-blob g-b3"></div>
+    <div class="g-blob g-b4"></div>
+    <div class="g-blob g-b5"></div>
+  </div>
+
+  <!-- FLOATING NAV -->
+  <nav class="fnav" id="fnav">
+    <a href="index.html" class="fp active">Home</a>
+    <a href="mentorship.html" class="fp">Mentorship</a>
+    <a href="contact.html" class="fp">Contact</a>
   </nav>
 
-  <!-- ===================== Hero ===================== -->
-  <main class="hero">
+  <!-- HERO SCROLL CONTAINER (500vh) -->
+  <div class="hero-scroll" id="hero-scroll">
+    <div class="hero-pin" id="hero-pin">
 
-    <!-- Left Column -->
-    <div class="hero-left">
-
-      <div class="intro" data-animate>
-        <h1 class="headline">
-          Hi, I am Magdalena,<br />
-          your favorite<br />
-          <span class="headline-accent">Principal Product Designer.</span>
-        </h1>
-        <p class="bio">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip.
-        </p>
+      <div class="h-name" id="h-name">
+        <div class="h-name-line">
+          <span class="h-c">M</span><span class="h-c">A</span><span class="h-c">G</span><span class="h-c">D</span><span class="h-c">A</span><span class="h-c">L</span><span class="h-c">E</span><span class="h-c">N</span><span class="h-c">A</span>
+        </div>
+        <div class="h-name-line">
+          <span class="h-c">H</span><span class="h-c">E</span><span class="h-c">N</span><span class="h-c">D</span><span class="h-c">Z</span><span class="h-c">E</span><span class="h-c">L</span><span class="h-c">E</span><span class="h-c">K</span>
+        </div>
       </div>
 
-      <div class="persona-selector" data-animate data-delay="200">
-        <p class="selector-intro">Now, tell me a bit more about yourself.</p>
+      <!-- Photo: replace div with <img src="images/magdalena.jpg" alt="Magdalena"> when ready -->
+      <div class="h-photo" id="h-photo">
+        <div class="h-photo-placeholder"></div>
+      </div>
 
-        <div class="selector-row">
-          <span class="selector-label">You are:</span>
-          <div class="custom-select-wrap">
-            <select class="custom-select" id="persona-select">
-              <option value="">Select</option>
-              <option value="recruiter">Recruiter</option>
-              <option value="hiring-manager">Hiring Manager</option>
-              <option value="design-director">Design Director</option>
-              <option value="designer">Designer</option>
-            </select>
-            <span class="select-arrow">↓</span>
-          </div>
-        </div>
+      <div class="h-who" id="h-who">
+        <span class="w-c">W</span>
+        <span class="w-c">H</span>
+        <span class="w-c">O</span>
+        <span class="w-c who-q">?</span>
+      </div>
 
-        <div class="selector-row">
-          <span class="selector-label">You are here to:</span>
-          <div class="custom-select-wrap">
-            <select class="custom-select" id="purpose-select" disabled>
-              <option value="">Select</option>
-            </select>
-            <span class="select-arrow">↓</span>
-          </div>
-        </div>
-
-        <button class="explore-btn" id="explore-btn" disabled>
-          <span>Let's explore</span>
-          <span class="btn-arrow">→</span>
-        </button>
+      <div class="scroll-hint" id="scroll-hint">
+        <span class="sh-text">scroll</span>
+        <div class="sh-line"></div>
       </div>
 
     </div>
+  </div>
 
-    <!-- Right Column -->
-    <div class="hero-right" data-animate data-delay="350">
-      <div class="projects-wrapper">
-        <div class="projects-track-outer">
-          <div class="projects-track" id="projects-track">
-            <div class="project-card">
-              <div class="project-thumb">
-                <span class="thumb-label">Project 01</span>
+  <!-- HORIZONTAL SCROLL (300vh) -->
+  <div class="hx-wrap" id="hx-wrap">
+    <div class="hx-pin" id="hx-pin">
+      <div class="hx-track" id="hx-track">
+
+        <!-- Panel 004 -->
+        <div class="hx-panel p004">
+          <div class="pc">
+            <div class="pc-left">
+              <h2 class="pc-hl">Your Favorite<br>Principal<br>Product Designer</h2>
+              <p class="pc-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <div class="pc-stats">
+                <div class="pc-stat">
+                  <span class="ps-num">$1.3M</span>
+                  <span class="ps-lbl">Gathered in funding</span>
+                </div>
+                <div class="pc-stat">
+                  <span class="ps-num">3mo</span>
+                  <span class="ps-lbl">From idea to dev-ready</span>
+                </div>
+                <div class="pc-stat">
+                  <span class="ps-num">8+</span>
+                  <span class="ps-lbl">Years experience</span>
+                </div>
               </div>
             </div>
-            <div class="project-card">
-              <div class="project-thumb">
-                <span class="thumb-label">Project 02</span>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="project-thumb">
-                <span class="thumb-label">Project 03</span>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="project-thumb">
-                <span class="thumb-label">Project 04</span>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="project-thumb">
-                <span class="thumb-label">Project 05</span>
-              </div>
-            </div>
-            <div class="project-card">
-              <div class="project-thumb">
-                <span class="thumb-label">Project 06</span>
+            <div class="pc-right">
+              <div class="mockup-cluster">
+                <div class="mc mc-a"></div>
+                <div class="mc mc-b"></div>
+                <div class="mc mc-c"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="projects-nav">
-          <button class="proj-arrow" id="prev-proj" aria-label="Previous" disabled>↑</button>
-          <button class="proj-arrow" id="next-proj" aria-label="Next">↓</button>
+        <!-- Panel 005 -->
+        <div class="hx-panel p005">
+          <div class="pc">
+            <div class="pc-left">
+              <span class="panel-num">01</span>
+              <h2 class="pc-hl">Discovery<br>&amp; Research</h2>
+              <p class="pc-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+            <div class="pc-right">
+              <div class="sticker-field">
+                <div class="sk sk-circle c-purple"></div>
+                <div class="sk sk-circle c-blue"></div>
+                <div class="sk sk-circle c-green"></div>
+                <div class="sk sk-pill"></div>
+                <div class="sk sk-card"></div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Panel 006 -->
+        <div class="hx-panel p006">
+          <div class="pc">
+            <div class="pc-left">
+              <span class="panel-num">02</span>
+              <h2 class="pc-hl">UX Design<br>&amp; Strategy</h2>
+              <p class="pc-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+            <div class="pc-right">
+              <div class="sticker-field">
+                <div class="sk sk-circle c-pink"></div>
+                <div class="sk sk-circle c-orange"></div>
+                <div class="sk sk-ring"></div>
+                <div class="sk sk-card sk-card-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+  </div>
 
-  </main>
+  <!-- SECTION 007 — Persona Selector -->
+  <section class="s007" id="s007">
+    <div class="s007-inner">
+      <p class="s007-q">Now, tell me a bit more about yourself.</p>
+      <div class="sel-row">
+        <span class="sel-label">You are:</span>
+        <div class="sel-wrap">
+          <select class="sel" id="persona-select">
+            <option value="">Select</option>
+            <option value="recruiter">Recruiter</option>
+            <option value="hiring-manager">Hiring Manager</option>
+            <option value="design-director">Design Director</option>
+            <option value="designer">Designer</option>
+          </select>
+          <span class="sel-arrow">&#8595;</span>
+        </div>
+      </div>
+      <div class="sel-row">
+        <span class="sel-label">You are here to:</span>
+        <div class="sel-wrap">
+          <select class="sel" id="purpose-select" disabled>
+            <option value="">Select</option>
+          </select>
+          <span class="sel-arrow">&#8595;</span>
+        </div>
+      </div>
+      <button class="explore-btn" id="explore-btn" disabled>
+        <span>Let's explore</span>
+        <span class="eb-arrow">&#8594;</span>
+      </button>
+    </div>
+  </section>
 
   <script src="js/main.js"></script>
 </body>
