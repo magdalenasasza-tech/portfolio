@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magdalena — Principal Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===================== Floating Navigation ===================== -->
+  <nav class="floating-nav" id="floating-nav">
+    <a href="index.html" class="nav-pill active">Home</a>
+    <a href="mentorship.html" class="nav-pill">Mentorship Program</a>
+    <a href="contact.html" class="nav-pill">Contact</a>
+  </nav>
+
+  <!-- ===================== Hero ===================== -->
+  <main class="hero">
+
+    <!-- Left Column -->
+    <div class="hero-left">
+
+      <div class="intro" data-animate>
+        <h1 class="headline">
+          Hi, I am Magdalena,<br />
+          your favorite<br />
+          <span class="headline-accent">Principal Product Designer.</span>
+        </h1>
+        <p class="bio">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip.
+        </p>
+      </div>
+
+      <div class="persona-selector" data-animate data-delay="200">
+        <p class="selector-intro">Now, tell me a bit more about yourself.</p>
+
+        <div class="selector-row">
+          <span class="selector-label">You are:</span>
+          <div class="custom-select-wrap">
+            <select class="custom-select" id="persona-select">
+              <option value="">Select</option>
+              <option value="recruiter">Recruiter</option>
+              <option value="hiring-manager">Hiring Manager</option>
+              <option value="design-director">Design Director</option>
+              <option value="designer">Designer</option>
+            </select>
+            <span class="select-arrow">↓</span>
+          </div>
+        </div>
+
+        <div class="selector-row">
+          <span class="selector-label">You are here to:</span>
+          <div class="custom-select-wrap">
+            <select class="custom-select" id="purpose-select" disabled>
+              <option value="">Select</option>
+            </select>
+            <span class="select-arrow">↓</span>
+          </div>
+        </div>
+
+        <button class="explore-btn" id="explore-btn" disabled>
+          <span>Let's explore</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="hero-right" data-animate data-delay="350">
+      <div class="projects-wrapper">
+        <div class="projects-track-outer">
+          <div class="projects-track" id="projects-track">
+            <div class="project-card">
+              <div class="project-thumb">
+                <span class="thumb-label">Project 01</span>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-thumb">
+                <span class="thumb-label">Project 02</span>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-thumb">
+                <span class="thumb-label">Project 03</span>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-thumb">
+                <span class="thumb-label">Project 04</span>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-thumb">
+                <span class="thumb-label">Project 05</span>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-thumb">
+                <span class="thumb-label">Project 06</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="projects-nav">
+          <button class="proj-arrow" id="prev-proj" aria-label="Previous" disabled>↑</button>
+          <button class="proj-arrow" id="next-proj" aria-label="Next">↓</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
