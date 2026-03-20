@@ -2,7 +2,7 @@
    ROOT TOKENS
    ============================================================ */
 :root {
-  --bg:           #F8F4FF;
+  --bg:           #FAFAF8;
   --text:         #0A0A0A;
   --muted:        #666666;
   --accent:       #BF8840;
@@ -26,36 +26,85 @@ body {
 }
 
 /* ============================================================
-   GRADIENT BACKGROUND — fixed, always behind everything
+   GRADIENT SHAPES — fixed, elegant, parallax on scroll
+   3 organic shapes: rose-gold, lavender-silver, champagne
    ============================================================ */
 .g-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background: #F5F0FF;
+  background: #FAFAF8;
   pointer-events: none;
 }
 
+/* Shared shape base */
 .g-blob {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.75;
   will-change: transform;
+  filter: blur(72px);
 }
 
-.g-b1 { width: min(700px,70vw); height: min(700px,70vw); background: #F0ABFC; top: -20%; left: -10%; animation: gf1 18s ease-in-out infinite; }
-.g-b2 { width: min(580px,58vw); height: min(580px,58vw); background: #A78BFA; top: 10%;  right: -12%; animation: gf2 22s ease-in-out infinite; }
-.g-b3 { width: min(500px,50vw); height: min(500px,50vw); background: #E879F9; bottom: -5%; left: 15%; animation: gf3 15s ease-in-out infinite; }
-.g-b4 { width: min(440px,44vw); height: min(440px,44vw); background: #F9A8D4; top: 45%;  left: 42%;  animation: gf4 25s ease-in-out infinite; }
-.g-b5 { width: min(340px,34vw); height: min(340px,34vw); background: #C084FC; top: 8%;   left: 36%;  animation: gf5 20s ease-in-out infinite; }
+/* Shape 1 — large rose-gold/champagne, bottom-left */
+.g-b1 {
+  width: min(900px, 85vw);
+  height: min(700px, 65vw);
+  left: -20%;
+  bottom: -15%;
+  background: radial-gradient(ellipse at 40% 50%,
+    rgba(224, 196, 176, 0.62) 0%,
+    rgba(210, 182, 196, 0.35) 45%,
+    transparent 72%);
+  border-radius: 58% 42% 34% 66% / 52% 36% 64% 48%;
+  animation: shBreathe1 28s ease-in-out infinite;
+}
 
-@keyframes gf1 { 0%,100%{transform:translate(0,0) scale(1)} 25%{transform:translate(60px,80px) scale(1.05)} 50%{transform:translate(100px,-40px) scale(0.95)} 75%{transform:translate(-30px,60px) scale(1.08)} }
-@keyframes gf2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-80px,60px) scale(1.1)} 66%{transform:translate(40px,-80px) scale(0.9)} }
-@keyframes gf3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(80px,-60px) scale(1.1)} }
-@keyframes gf4 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(-60px,-80px) scale(0.9)} 80%{transform:translate(80px,40px) scale(1.1)} }
-@keyframes gf5 { 0%,100%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(-40px,60px) rotate(15deg) scale(1.1)} }
+/* Shape 2 — lavender-silver, top-right */
+.g-b2 {
+  width: min(780px, 72vw);
+  height: min(680px, 62vw);
+  right: -18%;
+  top: -10%;
+  background: radial-gradient(ellipse at 60% 40%,
+    rgba(196, 186, 220, 0.55) 0%,
+    rgba(180, 196, 218, 0.28) 48%,
+    transparent 70%);
+  border-radius: 44% 56% 62% 38% / 60% 44% 56% 40%;
+  animation: shBreathe2 34s ease-in-out infinite;
+}
+
+/* Shape 3 — warm champagne accent, center-right */
+.g-b3 {
+  width: min(480px, 45vw);
+  height: min(420px, 38vw);
+  right: 8%;
+  top: 40%;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(232, 220, 200, 0.45) 0%,
+    rgba(216, 206, 188, 0.20) 50%,
+    transparent 72%);
+  border-radius: 52% 48% 44% 56% / 44% 58% 42% 56%;
+  animation: shBreathe3 22s ease-in-out infinite;
+}
+
+/* Idle breathing — very slow, subtle */
+@keyframes shBreathe1 {
+  0%,100% { transform: scale(1)    rotate(0deg); }
+  33%      { transform: scale(1.04) rotate(2deg); }
+  66%      { transform: scale(0.97) rotate(-1.5deg); }
+}
+@keyframes shBreathe2 {
+  0%,100% { transform: scale(1)    rotate(0deg); }
+  40%      { transform: scale(1.05) rotate(-2.5deg); }
+  75%      { transform: scale(0.96) rotate(1.5deg); }
+}
+@keyframes shBreathe3 {
+  0%,100% { transform: scale(1)    rotate(0deg); }
+  50%      { transform: scale(1.06) rotate(3deg); }
+}
+
+/* Unused blobs hidden */
+.g-b4, .g-b5 { display: none; }
 
 /* ============================================================
    FLOATING NAV — liquid glass
@@ -161,7 +210,7 @@ body {
 .h-photo-placeholder {
   width: 100%;
   padding-bottom: 125%;
-  background: linear-gradient(180deg, #E8D5F5 0%, #C4A8E8 60%, #B09AE0 100%);
+  background: linear-gradient(180deg, #E4D8D0 0%, #D4C8C0 50%, #C8BEB8 100%);
   border-radius: 24px 24px 0 0;
   position: relative;
 }
@@ -267,8 +316,8 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(2px);
+  background: rgba(250,250,248,0.82);
+  backdrop-filter: blur(4px);
 }
 
 /* Panel grid */
@@ -357,8 +406,8 @@ body {
   height: 240px;
   top: 20px;
   right: 0;
-  background: linear-gradient(135deg, #E8D5F5, #D4B8F0);
-  box-shadow: 0 24px 64px rgba(150,100,200,0.18);
+  background: linear-gradient(135deg, #EDE0D8, #DDD0CC);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.07);
   transform: rotate(-2deg);
   animation: mcFloat1 7s ease-in-out infinite;
 }
@@ -368,8 +417,8 @@ body {
   height: 190px;
   top: 50px;
   left: 0;
-  background: linear-gradient(135deg, #F5E8FF, #EDD9FF);
-  box-shadow: 0 18px 48px rgba(150,100,200,0.13);
+  background: linear-gradient(135deg, #E4DDE8, #D8D0E0);
+  box-shadow: 0 18px 48px rgba(0,0,0,0.06);
   transform: rotate(1.5deg);
   animation: mcFloat2 9s ease-in-out infinite 1s;
 }
@@ -379,8 +428,8 @@ body {
   height: 150px;
   bottom: 30px;
   right: 8%;
-  background: linear-gradient(135deg, #D4B8F0, #C4A8E8);
-  box-shadow: 0 12px 32px rgba(150,100,200,0.12);
+  background: linear-gradient(135deg, #E8E0D4, #DDD8CC);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.05);
   transform: rotate(-1deg);
   animation: mcFloat3 11s ease-in-out infinite 0.5s;
 }
@@ -449,12 +498,12 @@ body {
   transform: translate(-50%, -50%) rotate(3deg);
 }
 
-/* Sticker colors + float animations */
-.c-purple { background: radial-gradient(circle, #C084FC, #A855F7); top: 8%;  right: 22%; animation: skf 8s  ease-in-out infinite;      }
-.c-blue   { background: radial-gradient(circle, #818CF8, #6366F1); bottom:18%; left: 4%;  animation: skf 10s ease-in-out infinite 1s;   }
-.c-green  { background: radial-gradient(circle, #6EE7B7, #10B981); top: 58%; left: 18%;  animation: skf 7s  ease-in-out infinite 0.5s; }
-.c-pink   { background: radial-gradient(circle, #F9A8D4, #EC4899); top: 12%; left: 8%;   animation: skf 9s  ease-in-out infinite 2s;   }
-.c-orange { background: radial-gradient(circle, #FCD34D, #F59E0B); bottom:22%; right:18%; animation: skf 11s ease-in-out infinite 0.8s; }
+/* Sticker colors + float animations — muted, sophisticated */
+.c-purple { background: radial-gradient(circle, #C8B8D4, #B0A0C0); top: 8%;   right: 22%; animation: skf 8s  ease-in-out infinite;      }
+.c-blue   { background: radial-gradient(circle, #B8C4D8, #A8B4C8); bottom:18%; left: 4%;  animation: skf 10s ease-in-out infinite 1s;   }
+.c-green  { background: radial-gradient(circle, #B8CCC0, #A4B8AC); top: 58%;  left: 18%;  animation: skf 7s  ease-in-out infinite 0.5s; }
+.c-pink   { background: radial-gradient(circle, #DEC8C0, #CEB8B0); top: 12%;  left: 8%;   animation: skf 9s  ease-in-out infinite 2s;   }
+.c-orange { background: radial-gradient(circle, #D8C8A8, #C8B890); bottom:22%; right:18%; animation: skf 11s ease-in-out infinite 0.8s; }
 
 @keyframes skf {
   0%,100% { transform: translateY(0)    rotate(0deg); }
@@ -473,8 +522,8 @@ body {
   align-items: center;
   justify-content: center;
   padding: 100px 40px 160px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(250,250,248,0.65);
+  backdrop-filter: blur(6px);
 }
 
 .s007-inner {

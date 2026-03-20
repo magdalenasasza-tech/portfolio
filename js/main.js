@@ -96,38 +96,46 @@ heroTl.to('#h-who', {
 }, 75);
 
 /* ============================================================
-   3. GRADIENT COLOR SHIFT on scroll sections
+   3. SHAPE PARALLAX — scroll-driven movement at different rates
    ============================================================ */
-// Shift to cooler/lighter palette when entering horizontal section
-ScrollTrigger.create({
-  trigger: '#hx-wrap',
-  start: 'top 70%',
-  onEnter: () => {
-    gsap.to('.g-b1', { backgroundColor: '#BAE6FD', duration: 2.5, ease: 'power2.inOut' });
-    gsap.to('.g-b2', { backgroundColor: '#6EE7B7', duration: 3,   ease: 'power2.inOut' });
-    gsap.to('.g-b3', { backgroundColor: '#FDE68A', duration: 2,   ease: 'power2.inOut' });
-    gsap.to('.g-b4', { backgroundColor: '#FBCFE8', duration: 3.5, ease: 'power2.inOut' });
-    gsap.to('.g-b5', { backgroundColor: '#A5F3FC', duration: 2.5, ease: 'power2.inOut' });
-  },
-  onLeaveBack: () => {
-    gsap.to('.g-b1', { backgroundColor: '#F0ABFC', duration: 2.5, ease: 'power2.inOut' });
-    gsap.to('.g-b2', { backgroundColor: '#A78BFA', duration: 3,   ease: 'power2.inOut' });
-    gsap.to('.g-b3', { backgroundColor: '#E879F9', duration: 2,   ease: 'power2.inOut' });
-    gsap.to('.g-b4', { backgroundColor: '#F9A8D4', duration: 3.5, ease: 'power2.inOut' });
-    gsap.to('.g-b5', { backgroundColor: '#C084FC', duration: 2.5, ease: 'power2.inOut' });
-  },
+// Shape 1 (bottom-left) — moves up slowly, slight rotate
+gsap.to('.g-b1', {
+  yPercent: -25,
+  rotation: 8,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: 'body',
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 2,
+  }
 });
 
-// Shift to even lighter/whiter palette for persona selector
-ScrollTrigger.create({
-  trigger: '#s007',
-  start: 'top 70%',
-  onEnter: () => {
-    gsap.to('.g-blob', { opacity: 0.35, duration: 2, ease: 'power2.inOut' });
-  },
-  onLeaveBack: () => {
-    gsap.to('.g-blob', { opacity: 0.75, duration: 2, ease: 'power2.inOut' });
-  },
+// Shape 2 (top-right) — moves down slightly, opposite direction
+gsap.to('.g-b2', {
+  yPercent: 18,
+  rotation: -6,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: 'body',
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 3,
+  }
+});
+
+// Shape 3 (center-right) — moves up faster, drifts left
+gsap.to('.g-b3', {
+  yPercent: -40,
+  xPercent: -8,
+  rotation: 12,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: 'body',
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 1.5,
+  }
 });
 
 /* ============================================================
