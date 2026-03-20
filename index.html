@@ -21,75 +21,37 @@
   </nav>
 
   <!-- =====================================================
-       HERO ZONE — 600vh tall, stages pin inside
+       HERO ZONE — pins hero-stage while scroll plays out
   ===================================================== -->
   <div class="hero-zone" id="hero-zone">
     <div class="hero-stage" id="hero-stage">
 
-      <!-- LAYER 0: MH Logo (000) -->
-      <div class="layer" id="l-logo">
-        <svg id="mh-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <path id="spiky-path" fill="none" stroke="#0A0A0A" stroke-width="1.2"/>
-          <text id="mh-m" x="200" y="193" text-anchor="middle" class="mh-letter">M</text>
-          <text id="mh-h" x="200" y="268" text-anchor="middle" class="mh-letter">H</text>
-        </svg>
+      <!-- NAME BLOCK: starts as "MH", slides left, then types full name -->
+      <div id="mh-block">
+        <div class="nm-line">
+          <span class="nm-anchor">M</span><span class="nm-rest" id="nm-rest-1"></span>
+        </div>
+        <div class="nm-line">
+          <span class="nm-anchor">H</span><span class="nm-rest" id="nm-rest-2"></span>
+        </div>
       </div>
 
-      <!-- LAYER 1: Big Name (001) -->
-      <div class="layer" id="l-name">
-        <h1 class="big-name">
-          <span class="nm-line" id="nm1">MAGDALENA</span>
-          <span class="nm-line" id="nm2">HENDZELEK</span>
-        </h1>
-      </div>
-
-      <!-- LAYER 2: Stickers — 6 total (3 initial + 3 duplicates for scatter) -->
+      <!-- STICKERS (scroll-triggered, one by one) -->
       <div class="layer" id="l-stickers">
-
-        <!-- === INITIAL 3 (visible from 002) === -->
-
-        <!-- Sticker A: Praying hands -->
         <div class="stk" id="stk-a">
           <img src="images/icon 1.png" class="stk-img" alt="">
         </div>
-
-        <!-- Sticker B: Figma frame with fire -->
         <div class="stk" id="stk-b">
           <img src="images/icon 2.png" class="stk-img" alt="">
         </div>
-
-        <!-- Sticker C: M speech bubble -->
         <div class="stk" id="stk-c">
           <img src="images/icon 3.png" class="stk-img" alt="">
         </div>
-
-        <!-- === DUPLICATES (hidden, appear during scatter 004) === -->
-
-        <!-- Sticker D: Figma frame (duplicate) -->
-        <div class="stk stk-dup" id="stk-d">
-          <img src="images/icon 2.png" class="stk-img" alt="">
-        </div>
-
-        <!-- Sticker E: M bubble (duplicate) -->
-        <div class="stk stk-dup" id="stk-e">
-          <img src="images/icon 3.png" class="stk-img" alt="">
-        </div>
-
-        <!-- Sticker F: Praying hands (duplicate) -->
-        <div class="stk stk-dup" id="stk-f">
-          <img src="images/icon 1.png" class="stk-img" alt="">
-        </div>
-
-      </div><!-- /l-stickers -->
-
-      <!-- LAYER 3: Photo (003) -->
-      <div class="layer" id="l-photo">
-        <img src="images/magdalena.png" class="hero-photo" alt="Magdalena Hendzelek">
       </div>
 
-      <!-- LAYER 4: WHO? (004) -->
-      <div class="layer" id="l-who">
-        <div class="who-txt">WHO?</div>
+      <!-- PHOTO (scroll-triggered, rises from below) -->
+      <div class="layer" id="l-photo">
+        <img src="images/magdalena.png" class="hero-photo" alt="Magdalena Hendzelek">
       </div>
 
     </div><!-- /hero-stage -->

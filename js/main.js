@@ -1,197 +1,236 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
-   GENERATE SPIKY CIRCLE SVG PATH
-   Deterministic (no Math.random) — same shape every load
-   ============================================================ */
-function genSpikyPath(cx, cy, r, n) {
-  const pts = [];
-  const noise = (i) => (Math.sin(i * 17.3 + 2.1) * 0.5 + 0.5); // 0–1, deterministic
-  for (let i = 0; i < n; i++) {
-    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-    const isSpike = i % 2 === 0;
-    const v = noise(i);
-    const rad = isSpike ? r + 4 + v * 22 : r - 2 - v * 7;
-    pts.push([cx + rad * Math.cos(angle), cy + rad * Math.sin(angle)]);
-  }
-  return 'M ' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L ') + ' Z';
-}
-
-/* ============================================================
-   INIT
+   INIT — runs after all assets (fonts, images) are loaded
    ============================================================ */
 window.addEventListener('load', () => {
 
-  // Build + inject spiky path
-  const spikyEl = document.getElementById('spiky-path');
-  spikyEl.setAttribute('d', genSpikyPath(200, 200, 140, 80));
-  const pathLen = spikyEl.getTotalLength();
+  /* ----------------------------------------------------------
+     BUILD TYPED LETTERS
+     Populates #nm-rest-1 with AGDALENA, #nm-rest-2 with ENDZELEK
+     Each character is a <span> so we can stagger them in
+  ---------------------------------------------------------- */
+  function buildTypedLetters(elId, letters) {
+    const el = document.getElementById(elId);
+    letters.split('').forEach(ch => {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      el.appendChild(s);
+    });
+  }
 
-  // Set photo off-screen below
-  gsap.set('#l-photo', { y: '110vh' });
+  buildTypedLetters('nm-rest-1', 'AGDALENA');
+  buildTypedLetters('nm-rest-2', 'ENDZELEK');
 
-  // ============================================================
-  // SEQUENCE — time-based (plays on load, no scroll needed)
-  // ============================================================
+  /* ----------------------------------------------------------
+     INITIAL GSAP STATES
+  ---------------------------------------------------------- */
+  // Name block: hidden, centered via GSAP transforms
+  gsap.set('#mh-block', {
+    opacity: 0,
+    xPercent: -50,   // shift left by 50% of own width → visual center
+    yPercent: -50,   // shift up by 50% of own height → visual center
+  });
+
+  // Rest-of-name letters: invisible (will type in)
+  gsap.set('#nm-rest-1 span, #nm-rest-2 span', { opacity: 0 });
+
+  // Stickers: hidden and scaled down
+  gsap.set(['#stk-a', '#stk-b', '#stk-c'], { opacity: 0, scale: 0 });
+
+  // Photo: off-screen below
+  gsap.set('#l-photo', { y: '70vh', opacity: 0 });
+
+  /* ----------------------------------------------------------
+     INTRO TIMELINE (auto-plays on load, no scroll required)
+
+     Step 1 — MH fades in at center (only M and H visible)
+     Step 2 — MH slides to the left
+     Step 3 — "AGDALENA" types out letter by letter from M
+     Step 4 — "ENDZELEK" types out letter by letter from H
+  ---------------------------------------------------------- */
   const intro = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
-  // 000: Logo SVG fades in
-  intro.to('#mh-svg', { opacity: 1, duration: 0.4 });
+  // 1. Fade in at center
+  intro.to('#mh-block', {
+    opacity: 1,
+    duration: 0.7,
+    ease: 'power3.out',
+  });
 
-  // Draw the spiky circle
-  intro.fromTo(spikyEl,
-    { strokeDasharray: pathLen, strokeDashoffset: pathLen },
-    { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut' },
-    '<'
-  );
-
-  // MH letters appear after circle finishes
-  intro.to('.mh-letter', { opacity: 1, stagger: 0.2, duration: 0.5 }, '-=0.4');
-
-  // Short hold…
-  intro.to({}, { duration: 0.7 });
-
-  // 000 → 001: Logo fades out, name fades in simultaneously
-  intro.to('#mh-svg', { opacity: 0, scale: 1.08, duration: 0.7, ease: 'power2.in' });
-  intro.to('.big-name', { opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.4');
-
-  // Short hold…
+  // Brief pause so the MH reads as a monogram
   intro.to({}, { duration: 0.5 });
 
-  // 001 → 002: Stickers pop in with spring
-  intro.to(['#stk-a', '#stk-b', '#stk-c'], {
+  // 2. Slide from center to top-left
+  intro.to('#mh-block', {
+    left: '4%',
+    xPercent: 0,
+    duration: 1.0,
+    ease: 'power3.inOut',
+  });
+
+  // 3. Type "AGDALENA" — each letter appears instantly, staggered
+  intro.to('#nm-rest-1 span', {
     opacity: 1,
-    scale: 1,
-    stagger: 0.15,
-    duration: 0.6,
-    ease: 'back.out(2)',
-    onComplete: startLevitation,
-  });
+    duration: 0.001,
+    stagger: 0.065,
+    ease: 'none',
+  }, '-=0.05');
 
-});
+  // 4. Type "ENDZELEK" — slight overlap with first line finishing
+  intro.to('#nm-rest-2 span', {
+    opacity: 1,
+    duration: 0.001,
+    stagger: 0.065,
+    ease: 'none',
+  }, '-=0.25');
 
-/* ============================================================
-   LEVITATION — continuous float for initial 3 stickers
-   ============================================================ */
-let levTweens = [];
+  /* ----------------------------------------------------------
+     SCROLL — stickers pop in one by one, then float
+     Photo rises from the bottom
+  ---------------------------------------------------------- */
 
-function startLevitation() {
-  const configs = [
-    { id: '#stk-a', y: -14, rot:  3, dur: 3.4, delay: 0 },
-    { id: '#stk-b', y: -10, rot: -4, dur: 4.1, delay: 0.7 },
-    { id: '#stk-c', y: -12, rot:  2, dur: 3.7, delay: 1.3 },
-  ];
-  configs.forEach(({ id, y, rot, dur, delay }) => {
-    const t = gsap.to(id, {
-      y, rotation: rot,
-      duration: dur,
-      ease: 'sine.inOut',
-      yoyo: true,
-      repeat: -1,
-      delay,
+  // Helper: pop sticker in with spring, then start floating loop
+  function popAndFloat(id, floatY, rotation, floatDur) {
+    gsap.to(id, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.55,
+      ease: 'back.out(2.2)',
+      onComplete: () => {
+        gsap.to(id, {
+          y: floatY,
+          rotation: rotation,
+          duration: floatDur,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        });
+      },
     });
-    levTweens.push(t);
-  });
-}
+  }
 
-/* ============================================================
-   SCROLL — Hero phases (003 photo + 004 WHO scatter)
-   ============================================================ */
-const scrollTl = gsap.timeline({
-  scrollTrigger: {
+  // Sticker A appears first (shallow scroll)
+  ScrollTrigger.create({
     trigger: '#hero-zone',
-    pin: '#hero-stage',
-    start: 'top top',
-    end: 'bottom bottom',
-    scrub: 1.5,
-  }
+    start: 'top+=80 top',
+    once: true,
+    onEnter: () => popAndFloat('#stk-a', -13, -6, 3.3),
+  });
+
+  // Sticker B appears second
+  ScrollTrigger.create({
+    trigger: '#hero-zone',
+    start: 'top+=220 top',
+    once: true,
+    onEnter: () => popAndFloat('#stk-b', -10,  7, 4.0),
+  });
+
+  // Sticker C appears third
+  ScrollTrigger.create({
+    trigger: '#hero-zone',
+    start: 'top+=360 top',
+    once: true,
+    onEnter: () => popAndFloat('#stk-c', -15, -4, 3.7),
+  });
+
+  // Photo rises from below — scrubbed to scroll
+  gsap.to('#l-photo', {
+    y: 0,
+    opacity: 1,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero-zone',
+      start: 'top+=350 top',
+      end:   'top+=750 top',
+      scrub: 1.5,
+    },
+  });
+
+  /* ----------------------------------------------------------
+     HORIZONTAL SCROLL — 3 panels slide sideways
+  ---------------------------------------------------------- */
+  gsap.to('#hx-track', {
+    xPercent: -200,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hx-wrap',
+      pin: '#hx-pin',
+      start: 'top top',
+      end: () => '+=' + (window.innerWidth * 2),
+      scrub: 1,
+      anticipatePin: 1,
+    },
+  });
+
+  /* ----------------------------------------------------------
+     PERSONA SELECTOR (007)
+  ---------------------------------------------------------- */
+  const purposeOptions = {
+    'recruiter':       [
+      { v: 'check-experience', l: 'Check my experience' },
+      { v: 'see-my-work',      l: 'See my work' },
+      { v: 'download-cv',      l: 'Download my CV' },
+    ],
+    'hiring-manager':  [
+      { v: 'case-studies', l: 'Review case studies' },
+      { v: 'see-process',  l: 'See my process' },
+      { v: 'expertise',    l: 'Understand expertise' },
+    ],
+    'design-director': [
+      { v: 'thinking',     l: 'See my design thinking' },
+      { v: 'review-work',  l: 'Review my work' },
+      { v: 'collaborate',  l: 'Discuss collaboration' },
+    ],
+    'designer':        [
+      { v: 'explore',    l: 'Explore portfolio' },
+      { v: 'mentoring',  l: 'Learn about mentoring' },
+      { v: 'browsing',   l: 'Just browsing' },
+    ],
+  };
+
+  const personaRoutes = {
+    'recruiter':       'recruiter.html',
+    'hiring-manager':  'hiring-manager.html',
+    'design-director': 'design-director.html',
+    'designer':        'designer.html',
+  };
+
+  const personaSel = document.getElementById('persona-select');
+  const purposeSel = document.getElementById('purpose-select');
+  const exploreBtn = document.getElementById('explore-btn');
+
+  personaSel.addEventListener('change', () => {
+    const val = personaSel.value;
+    purposeSel.innerHTML = '<option value="">Select</option>';
+    purposeSel.disabled = !val;
+    exploreBtn.disabled = true;
+    if (val && purposeOptions[val]) {
+      purposeOptions[val].forEach(o => {
+        const el = document.createElement('option');
+        el.value = o.v;
+        el.textContent = o.l;
+        purposeSel.appendChild(el);
+      });
+    }
+  });
+
+  purposeSel.addEventListener('change', () => {
+    exploreBtn.disabled = !purposeSel.value;
+  });
+
+  exploreBtn.addEventListener('click', () => {
+    const p = personaSel.value;
+    if (p && personaRoutes[p]) window.location.href = personaRoutes[p];
+  });
+
+  // 007 section entrance animation
+  gsap.fromTo('.s007-inner > *',
+    { opacity: 0, y: 28 },
+    {
+      opacity: 1, y: 0, stagger: 0.12, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: '#s007', start: 'top 70%', once: true },
+    }
+  );
+
 });
-
-// Phase 003 (0–40%): Photo rises from below
-scrollTl.to('#l-photo', { y: 0, duration: 40, ease: 'none' }, 0);
-
-// Phase 003→004 (50–65%): Name + photo fade out
-scrollTl.to('.big-name', { opacity: 0, duration: 12 }, 50);
-scrollTl.to('#l-photo',  { opacity: 0, y: -30, duration: 12 }, 52);
-
-// Phase 004 (58–80%): Stickers scatter to new positions
-// Kill levitation tweens when scatter starts
-ScrollTrigger.create({
-  trigger: '#hero-zone',
-  start: 'top+=58% top',
-  onEnter: () => { levTweens.forEach(t => t.kill()); },
-});
-
-// Initial 3 stickers move to scatter positions
-scrollTl.to('#stk-a', { left: '30%', top: '67%', scale: 1.15, duration: 20, ease: 'power2.inOut' }, 58);
-scrollTl.to('#stk-b', { left: '14%', top: '27%', scale: 0.9,  duration: 20, ease: 'power2.inOut' }, 60);
-scrollTl.to('#stk-c', { left: '56%', top: '70%', scale: 1.05, duration: 20, ease: 'power2.inOut' }, 59);
-
-// 3 duplicate stickers appear (004 only)
-scrollTl.fromTo('#stk-d', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 0.95, duration: 14, ease: 'back.out(1.5)' }, 63);
-scrollTl.fromTo('#stk-e', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1.1,  duration: 14, ease: 'back.out(1.5)' }, 65);
-scrollTl.fromTo('#stk-f', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1.2,  duration: 14, ease: 'back.out(1.5)' }, 67);
-
-// WHO? fades in
-scrollTl.fromTo('.who-txt',
-  { opacity: 0, scale: 0.92 },
-  { opacity: 1, scale: 1, duration: 18, ease: 'power2.out' },
-  68
-);
-
-/* ============================================================
-   HORIZONTAL SCROLL
-   ============================================================ */
-gsap.to('#hx-track', {
-  xPercent: -200,
-  ease: 'none',
-  scrollTrigger: {
-    trigger: '#hx-wrap',
-    pin: '#hx-pin',
-    start: 'top top',
-    end: () => '+=' + (window.innerWidth * 2),
-    scrub: 1,
-    anticipatePin: 1,
-  }
-});
-
-/* ============================================================
-   PERSONA SELECTOR
-   ============================================================ */
-const purposeOptions = {
-  'recruiter':       [{ v:'check-experience', l:'Check my experience' }, { v:'see-my-work', l:'See my work' }, { v:'download-cv', l:'Download my CV' }],
-  'hiring-manager':  [{ v:'case-studies', l:'Review case studies' }, { v:'see-process', l:'See my process' }, { v:'expertise', l:'Understand expertise' }],
-  'design-director': [{ v:'thinking', l:'See my design thinking' }, { v:'review-work', l:'Review my work' }, { v:'collaborate', l:'Discuss collaboration' }],
-  'designer':        [{ v:'explore', l:'Explore portfolio' }, { v:'mentoring', l:'Learn about mentoring' }, { v:'browsing', l:'Just browsing' }],
-};
-const personaRoutes = { 'recruiter':'recruiter.html','hiring-manager':'hiring-manager.html','design-director':'design-director.html','designer':'designer.html' };
-
-const personaSel = document.getElementById('persona-select');
-const purposeSel = document.getElementById('purpose-select');
-const exploreBtn = document.getElementById('explore-btn');
-
-personaSel.addEventListener('change', () => {
-  const val = personaSel.value;
-  purposeSel.innerHTML = '<option value="">Select</option>';
-  purposeSel.disabled = !val;
-  exploreBtn.disabled = true;
-  if (val && purposeOptions[val]) {
-    purposeOptions[val].forEach(o => {
-      const el = document.createElement('option');
-      el.value = o.v; el.textContent = o.l;
-      purposeSel.appendChild(el);
-    });
-  }
-});
-purposeSel.addEventListener('change', () => { exploreBtn.disabled = !purposeSel.value; });
-exploreBtn.addEventListener('click', () => {
-  const p = personaSel.value;
-  if (p && personaRoutes[p]) window.location.href = personaRoutes[p];
-});
-
-/* 007 entrance */
-gsap.fromTo('.s007-inner > *',
-  { opacity: 0, y: 28 },
-  { opacity: 1, y: 0, stagger: 0.12, duration: 0.9, ease: 'power3.out',
-    scrollTrigger: { trigger: '#s007', start: 'top 70%', once: true } }
-);

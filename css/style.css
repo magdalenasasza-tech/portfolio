@@ -34,7 +34,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); over
 /* ============================================================
    HERO ZONE + STAGE
    ============================================================ */
-.hero-zone { position: relative; height: 600vh; z-index: 1; }
+.hero-zone  { position: relative; height: 220vh; z-index: 1; }
 .hero-stage {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
   background: var(--bg);
@@ -50,43 +50,43 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); over
 }
 
 /* ============================================================
-   000 — MH LOGO
+   NAME BLOCK — MH → MAGDALENA / HENDZELEK
    ============================================================ */
-#l-logo { z-index: 10; }
-#mh-svg {
-  width: min(320px, 55vw);
-  height: min(320px, 55vw);
-  opacity: 0;
-}
-.mh-letter {
-  font-family: var(--font);
-  font-weight: 200;
-  font-size: 72px;
-  fill: var(--text);
-  opacity: 0;
-}
-
-/* ============================================================
-   001 — BIG NAME
-   ============================================================ */
-#l-name { z-index: 3; align-items: flex-start; justify-content: flex-start; }
-.big-name {
+#mh-block {
   position: absolute;
-  top: 12%;
-  left: 4%;
-  font-family: var(--font);
-  font-weight: 200;
-  font-size: clamp(80px, 15vw, 215px);
-  letter-spacing: -0.07em;
-  line-height: 0.9;
-  color: var(--text);
-  opacity: 0;
+  top: 44%;
+  left: 50%; /* GSAP centers it via xPercent, then slides to left: 4% */
+  z-index: 3;
+  pointer-events: none;
   user-select: none;
 }
-.nm-line { display: block; }
+
+.nm-line {
+  display: block;
+  font-family: var(--font);
+  font-weight: 200;
+  font-size: clamp(72px, 13vw, 195px);
+  letter-spacing: -0.07em;
+  line-height: 0.88;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.nm-anchor {
+  display: inline;
+}
+
+.nm-rest {
+  display: inline;
+}
+
+.nm-rest span {
+  display: inline;
+  opacity: 0;
+}
 
 /* ============================================================
-   002 — STICKERS
+   STICKERS
    ============================================================ */
 #l-stickers { z-index: 5; }
 
@@ -97,48 +97,28 @@ body { background: var(--bg); color: var(--text); font-family: var(--font); over
   cursor: default;
 }
 
-/* Initial positions (002/003 state) */
-#stk-a { left: 8%;  top: 60%; }
-#stk-b { left: 20%; top: 56%; }
-#stk-c { left: 80%; top: 53%; }
+/* Sticker positions — scattered around the photo */
+#stk-a { left: 6%;  top: 52%; }
+#stk-b { left: 70%; top: 12%; }
+#stk-c { left: 68%; top: 62%; }
 
-/* Duplicate positions (appear + stay in 004 scatter) */
-#stk-d { left: 62%; top: 14%; }
-#stk-e { left: 42%; top: 18%; }
-#stk-f { left: 80%; top: 62%; }
-
-/* Sticker images */
 .stk-img {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.12));
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.13));
 }
 
 /* ============================================================
-   003 — PHOTO
+   PHOTO
    ============================================================ */
-#l-photo { z-index: 4; align-items: flex-end; }
+#l-photo { z-index: 2; align-items: flex-end; justify-content: center; }
 .hero-photo {
-  width: clamp(280px, 36%, 520px);
+  width: clamp(260px, 32%, 460px);
   height: auto;
   display: block;
   mix-blend-mode: multiply;
-  /* remove white bg by multiply blending with #F9F8F5 */
-}
-
-/* ============================================================
-   004 — WHO?
-   ============================================================ */
-#l-who { z-index: 6; }
-.who-txt {
-  font-family: var(--font);
-  font-weight: 300;
-  font-size: clamp(80px, 16vw, 220px);
-  letter-spacing: -0.07em;
-  color: var(--text);
-  opacity: 0;
 }
 
 /* ============================================================
