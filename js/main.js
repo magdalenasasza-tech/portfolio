@@ -1,14 +1,16 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
-   INIT — runs after all assets (fonts, images) are loaded
+   INIT
    ============================================================ */
 window.addEventListener('load', () => {
 
   /* ----------------------------------------------------------
      BUILD TYPED LETTERS
-     Populates #nm-rest-1 with AGDALENA, #nm-rest-2 with ENDZELEK
-     Each character is a <span> so we can stagger them in
+     Fills #nm-rest-1 with AGDALENA and #nm-rest-2 with ENDZELEK.
+     Each character is a <span> so GSAP can stagger them in.
+     Opacity: 0 but present in DOM → container has full width
+     from the start, so centering is stable throughout.
   ---------------------------------------------------------- */
   function buildTypedLetters(elId, letters) {
     const el = document.getElementById(elId);
@@ -18,79 +20,76 @@ window.addEventListener('load', () => {
       el.appendChild(s);
     });
   }
-
   buildTypedLetters('nm-rest-1', 'AGDALENA');
   buildTypedLetters('nm-rest-2', 'ENDZELEK');
 
   /* ----------------------------------------------------------
-     INITIAL GSAP STATES
+     INITIAL STATES
   ---------------------------------------------------------- */
-  // Name block: hidden, centered via GSAP transforms
+  // Name block: centered via xPercent/yPercent, slightly
+  // offset right so it "eases in from the right" on fade.
+  // Because all letters are in DOM (opacity 0), the container
+  // has full word width → M/H naturally appear left-of-center
+  // which gives the "pushed slightly left" feeling.
   gsap.set('#mh-block', {
+    xPercent: -50,
+    yPercent: -50,
+    x: 24,        // slight rightward offset — floats left as it fades in
     opacity: 0,
-    xPercent: -50,   // shift left by 50% of own width → visual center
-    yPercent: -50,   // shift up by 50% of own height → visual center
   });
 
-  // Rest-of-name letters: invisible (will type in)
+  // Rest-of-name letters invisible
   gsap.set('#nm-rest-1 span, #nm-rest-2 span', { opacity: 0 });
 
-  // Stickers: hidden and scaled down
+  // Stickers: hidden + scaled down
   gsap.set(['#stk-a', '#stk-b', '#stk-c'], { opacity: 0, scale: 0 });
 
   // Photo: off-screen below
   gsap.set('#l-photo', { y: '70vh', opacity: 0 });
 
+  // WHO? invisible
+  gsap.set('.who-txt', { opacity: 0 });
+
   /* ----------------------------------------------------------
-     INTRO TIMELINE (auto-plays on load, no scroll required)
+     INTRO TIMELINE  (auto-plays, no scroll needed)
 
-     Step 1 — MH fades in at center (only M and H visible)
-     Step 2 — MH slides to the left
-     Step 3 — "AGDALENA" types out letter by letter from M
-     Step 4 — "ENDZELEK" types out letter by letter from H
+     1 — MH fades in at center, floating slightly left as it lands
+     2 — Brief pause (monogram moment)
+     3 — "AGDALENA" types out from the M
+     4 — "ENDZELEK" types out from the H
   ---------------------------------------------------------- */
-  const intro = gsap.timeline({ defaults: { ease: 'power2.out' } });
+  const intro = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-  // 1. Fade in at center
+  // 1. Fade in + drift left into position
   intro.to('#mh-block', {
     opacity: 1,
-    duration: 0.7,
+    x: 0,
+    duration: 1.0,
     ease: 'power3.out',
   });
 
-  // Brief pause so the MH reads as a monogram
-  intro.to({}, { duration: 0.5 });
+  // 2. Hold as MH monogram
+  intro.to({}, { duration: 0.55 });
 
-  // 2. Slide from center to top-left
-  intro.to('#mh-block', {
-    left: '4%',
-    xPercent: 0,
-    duration: 1.0,
-    ease: 'power3.inOut',
-  });
-
-  // 3. Type "AGDALENA" — each letter appears instantly, staggered
+  // 3. AGDALENA types out
   intro.to('#nm-rest-1 span', {
     opacity: 1,
     duration: 0.001,
-    stagger: 0.065,
+    stagger: 0.062,
     ease: 'none',
-  }, '-=0.05');
+  });
 
-  // 4. Type "ENDZELEK" — slight overlap with first line finishing
+  // 4. ENDZELEK types out (starts before line 1 finishes)
   intro.to('#nm-rest-2 span', {
     opacity: 1,
     duration: 0.001,
-    stagger: 0.065,
+    stagger: 0.062,
     ease: 'none',
-  }, '-=0.25');
+  }, '-=0.28');
 
   /* ----------------------------------------------------------
-     SCROLL — stickers pop in one by one, then float
-     Photo rises from the bottom
+     SCROLL PHASE 1 — Stickers pop in + float
   ---------------------------------------------------------- */
-
-  // Helper: pop sticker in with spring, then start floating loop
   function popAndFloat(id, floatY, rotation, floatDur) {
     gsap.to(id, {
       opacity: 1,
@@ -110,7 +109,6 @@ window.addEventListener('load', () => {
     });
   }
 
-  // Sticker A appears first (shallow scroll)
   ScrollTrigger.create({
     trigger: '#hero-zone',
     start: 'top+=80 top',
@@ -118,37 +116,57 @@ window.addEventListener('load', () => {
     onEnter: () => popAndFloat('#stk-a', -13, -6, 3.3),
   });
 
-  // Sticker B appears second
   ScrollTrigger.create({
     trigger: '#hero-zone',
-    start: 'top+=220 top',
+    start: 'top+=240 top',
     once: true,
     onEnter: () => popAndFloat('#stk-b', -10,  7, 4.0),
   });
 
-  // Sticker C appears third
   ScrollTrigger.create({
     trigger: '#hero-zone',
-    start: 'top+=360 top',
+    start: 'top+=400 top',
     once: true,
-    onEnter: () => popAndFloat('#stk-c', -15, -4, 3.7),
+    onEnter: () => popAndFloat('#stk-c', -14, -4, 3.7),
   });
 
-  // Photo rises from below — scrubbed to scroll
+  /* ----------------------------------------------------------
+     SCROLL PHASE 2 — Photo rises from below (scrubbed)
+  ---------------------------------------------------------- */
   gsap.to('#l-photo', {
     y: 0,
     opacity: 1,
     ease: 'none',
     scrollTrigger: {
       trigger: '#hero-zone',
-      start: 'top+=350 top',
-      end:   'top+=750 top',
+      start: 'top+=380 top',
+      end:   'top+=780 top',
       scrub: 1.5,
     },
   });
 
   /* ----------------------------------------------------------
-     HORIZONTAL SCROLL — 3 panels slide sideways
+     SCROLL PHASE 3 — WHO? reveals:
+     Name + photo fade out, WHO? fades in, stickers keep floating
+  ---------------------------------------------------------- */
+  const whoTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#hero-zone',
+      start: 'top+=950 top',
+      end:   'top+=1550 top',
+      scrub: 1.5,
+    },
+  });
+
+  // Name fades out
+  whoTl.to('#mh-block',  { opacity: 0, duration: 25 }, 0);
+  // Photo fades out slightly after
+  whoTl.to('#l-photo',   { opacity: 0, duration: 25 }, 10);
+  // WHO? fades in once they're gone
+  whoTl.to('.who-txt',   { opacity: 1, duration: 35 }, 30);
+
+  /* ----------------------------------------------------------
+     HORIZONTAL SCROLL — 3 panels
   ---------------------------------------------------------- */
   gsap.to('#hx-track', {
     xPercent: -200,
@@ -178,14 +196,14 @@ window.addEventListener('load', () => {
       { v: 'expertise',    l: 'Understand expertise' },
     ],
     'design-director': [
-      { v: 'thinking',     l: 'See my design thinking' },
-      { v: 'review-work',  l: 'Review my work' },
-      { v: 'collaborate',  l: 'Discuss collaboration' },
+      { v: 'thinking',    l: 'See my design thinking' },
+      { v: 'review-work', l: 'Review my work' },
+      { v: 'collaborate', l: 'Discuss collaboration' },
     ],
     'designer':        [
-      { v: 'explore',    l: 'Explore portfolio' },
-      { v: 'mentoring',  l: 'Learn about mentoring' },
-      { v: 'browsing',   l: 'Just browsing' },
+      { v: 'explore',   l: 'Explore portfolio' },
+      { v: 'mentoring', l: 'Learn about mentoring' },
+      { v: 'browsing',  l: 'Just browsing' },
     ],
   };
 
@@ -224,7 +242,7 @@ window.addEventListener('load', () => {
     if (p && personaRoutes[p]) window.location.href = personaRoutes[p];
   });
 
-  // 007 section entrance animation
+  // 007 entrance animation
   gsap.fromTo('.s007-inner > *',
     { opacity: 0, y: 28 },
     {
